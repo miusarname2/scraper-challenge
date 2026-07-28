@@ -16,6 +16,7 @@ export class Scraper {
   private client: OefaClient;
   private documentos: Documento[] = [];
   private downloadPdfs: boolean;
+  private maxPaginas: number;
   private progress: ScraperProgress = {
     totalRegistros: 0,
     totalPaginas: 0,
@@ -25,9 +26,10 @@ export class Scraper {
     pdfsConError: [],
   };
 
-  constructor(opts: { downloadPdfs?: boolean } = {}) {
+  constructor(opts: { downloadPdfs?: boolean; maxPaginas?: number } = {}) {
     this.client = new OefaClient();
     this.downloadPdfs = opts.downloadPdfs ?? true;
+    this.maxPaginas = opts.maxPaginas ?? 0;
   }
 
   async run(): Promise<void> {
@@ -43,7 +45,12 @@ export class Scraper {
     const { total, totalPages } = this.parseSearchMeta(searchResponse);
     this.progress.totalRegistros = total;
     this.progress.totalPaginas = totalPages;
-    console.log(`[+] ${total} registros encontrados (${totalPages} paginas)\n`);
+    const paginasARecorrer = this.maxPaginas > 0 ? Math.min(totalPages, this.maxPaginas) : totalPages;
+    console.log(`[+] ${total} registros encontrados (${totalPages} paginas)`);
+    if (this.maxPaginas > 0 && this.maxPaginas < totalPages) {
+      console.log(`[*] Limitado a ${this.maxPaginas} paginas por --max-paginas`);
+    }
+    console.log();
 
     // Pagina 1 viene en el response de busqueda
     const firstPageHtml = this.extractCDATA(searchResponse, 'listarDetalleInfraccionRAAForm:pgLista');
@@ -57,7 +64,8 @@ export class Scraper {
       if (this.downloadPdfs) await this.descargarPdfsDePagina(rows);
     }
 
-    for (let page = 2; page <= totalPages; page++) {
+    const limite = this.maxPaginas > 0 ? Math.min(totalPages, this.maxPaginas) : totalPages;
+    for (let page = 2; page <= limite; page++) {
       await sleep(DELAY_BETWEEN_PAGES);
 
       const firstRow = (page - 1) * ROWS_PER_PAGE;

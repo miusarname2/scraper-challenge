@@ -44,8 +44,8 @@ function leerArgsPJ(): { maxPaginas: number; sinPdf: boolean } {
 }
 
 async function ejecutarOefa(): Promise<void> {
-  const skipPdfs = process.argv.includes('--no-pdfs');
-  const scraper = new OefaScraper({ downloadPdfs: !skipPdfs });
+  const { maxPaginas, sinPdf } = leerArgsPJ();
+  const scraper = new OefaScraper({ downloadPdfs: !sinPdf, maxPaginas });
   await scraper.run();
 }
 
