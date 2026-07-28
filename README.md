@@ -11,11 +11,14 @@ Al ejecutar, un menu interactivo permite elegir cual sitio scrapear.
 
 - Node.js >= 18
 - npm
+- Git
 - VPN a Peru (solo para el scraper del Poder Judicial)
 
 ## Instalacion
 
 ```bash
+git clone https://github.com/miusarname2/scraper-challenge.git
+cd scraper-challenge
 npm install
 ```
 
