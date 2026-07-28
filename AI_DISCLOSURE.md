@@ -34,7 +34,7 @@ Le pedí a la IA que me explicara cómo funciona el protocolo AJAX de PrimeFaces
 
 ### Prompt(s) usados
 
-Le pedí a la IA que me ayudara a investigar la estructura del sitio del Poder Judicial. Como el sitio requiere VPN y no siempre tenía acceso, busqué repositorios públicos que ya lo hubieran scrapeado. Encontré un repo de referencia en GitHub y le pedí a la IA que me ayudara a entender su arquitectura para adaptarla a mi proyecto.
+Le pedí a la IA que me ayudara a investigar la estructura del sitio del Poder Judicial.
 
 ### Qué conservé tal cual
 
